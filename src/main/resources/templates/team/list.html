@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>团队列表 - Research Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; }
+        .navbar { background: #1a237e; color: white; padding: 0 2rem; display: flex; align-items: center; height: 60px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+        .navbar-brand { font-size: 1.4rem; font-weight: 700; text-decoration: none; color: white; margin-right: 2rem; }
+        .navbar-nav { display: flex; list-style: none; gap: 0.5rem; }
+        .navbar-nav a { color: rgba(255,255,255,0.85); text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; }
+        .navbar-nav a:hover, .navbar-nav a.active { color: white; background: rgba(255,255,255,0.15); }
+        .navbar-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
+        .navbar-right span { font-size: 0.85rem; opacity: 0.8; }
+        .navbar-right a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+        .page-title { font-size: 1.5rem; font-weight: 700; color: #1a237e; margin-bottom: 1.5rem; }
+        .card { background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); padding: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; font-weight: 600; font-size: 0.85rem; color: #666; text-transform: uppercase; }
+        td { font-size: 0.9rem; }
+        tr:hover { background: #f8f9fa; }
+        a { color: #1a237e; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="/dashboard">Research Hub</a>
+        <ul class="navbar-nav">
+            <li><a href="/dashboard">仪表盘</a></li>
+            <li><a href="/papers">论文</a></li>
+            <li><a href="/experiments">实验</a></li>
+            <li><a href="/projects">项目</a></li>
+            <li><a href="/teams" class="active">团队</a></li>
+            <li><a href="/notes">笔记</a></li>
+        </ul>
+        <div class="navbar-right">
+            <span sec:authentication="name">User</span>
+            <a href="/logout">退出</a>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="page-title">团队列表</h1>
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>研究方向</th>
+                        <th>负责人ID</th>
+                        <th>创建时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="team : ${teams}">
+                        <td><a th:href="@{/teams/{id}(id=${team.id})}" th:text="${team.name}">Name</a></td>
+                        <td th:text="${team.field} ?: '-'">Field</td>
+                        <td th:text="${team.leaderId}">Leader</td>
+                        <td th:text="${#temporals.format(team.createdAt, 'yyyy-MM-dd')}">Date</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
